@@ -14,21 +14,25 @@ type Puzzle struct {
 	Tiles  []Tile
 }
 
-func (p Puzzle) add(word Word) {
+// Add - Add a new word to the puzzle
+func (p *Puzzle) Add(word Word) {
 	directions := []direction{leftToRight, upToDown, downToUp}
 
+	fmt.Println(len(p.Tiles))
 	for _, tile := range p.Tiles {
 		for _, direction := range directions {
 			var tiles []*Tile
 
 			slot, err := p.checkWordFit(word, &tile, 0, direction, tiles)
 
-			if err == nil {
-				for i, changingTile := range slot {
-					changingTile.Value = string(word.Value[i])
-				}
+			if err != nil {
+				fmt.Printf("Unable to add word: %v\n", err)
+				continue
+			}
 
-				break
+			for i, changingTile := range slot {
+				changingTile.Value = string(word.Value[i])
+				fmt.Printf("{%v,%v} = %v", changingTile.X, changingTile.Y, string(word.Value[i]))
 			}
 		}
 	}
@@ -51,6 +55,15 @@ func (p Puzzle) checkWordFit(word Word, currentTile *Tile, wordIndex int, traver
 		}
 	}
 
-	message := fmt.Sprintf("tile '%v' does not match '%v'", currentTile.Value, word.Value[wordIndex])
+	message := fmt.Sprintf("tile '%v' does not match '%v'", currentTile.Value, string(word.Value[wordIndex]))
 	return visitedTiles, errors.New(message)
+}
+
+// Initialize - Init the puzzle with blank tiles based on the provided Length and Width
+func (p *Puzzle) Initialize() {
+	for i := 0; i < p.Length; i++ {
+		for j := 0; j < p.Width; j++ {
+			p.Tiles = append(p.Tiles, Tile{"", i, j})
+		}
+	}
 }
