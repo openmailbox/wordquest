@@ -1,0 +1,14 @@
+mouse
+scandisk
+speaker
+software
+folders
+printer
+games
+monitor
+reboot
+internet
+search
+icons
+notes
+screen
