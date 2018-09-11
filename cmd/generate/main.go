@@ -33,5 +33,5 @@ func main() {
 		newPuzzle.Add(newWord)
 	}
 
-	fmt.Printf("Puzzle now contains %v words.\n", len(newPuzzle.Words))
+	fmt.Println(newPuzzle)
 }

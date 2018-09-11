@@ -9,7 +9,7 @@ type direction func(puzzle Puzzle, currentTile *Tile) (nextTile *Tile, e error)
 
 func downToUp(puzzle Puzzle, currentTile *Tile) (nextTile *Tile, e error) {
 	for _, tile := range puzzle.Tiles {
-		if tile.Y == currentTile.Y && tile.X == currentTile.X+1 {
+		if tile.Y == currentTile.Y-1 && tile.X == currentTile.X {
 			return tile, nil
 		}
 	}
@@ -19,7 +19,7 @@ func downToUp(puzzle Puzzle, currentTile *Tile) (nextTile *Tile, e error) {
 
 func leftToRight(puzzle Puzzle, currentTile *Tile) (nextTile *Tile, e error) {
 	for _, tile := range puzzle.Tiles {
-		if tile.X == currentTile.X && tile.Y == currentTile.Y+1 {
+		if tile.X == currentTile.X+1 && tile.Y == currentTile.Y {
 			return tile, nil
 		}
 	}
@@ -29,7 +29,7 @@ func leftToRight(puzzle Puzzle, currentTile *Tile) (nextTile *Tile, e error) {
 
 func upToDown(puzzle Puzzle, currentTile *Tile) (nextTile *Tile, e error) {
 	for _, tile := range puzzle.Tiles {
-		if tile.Y == currentTile.Y && tile.X == currentTile.X-1 {
+		if tile.Y == currentTile.Y+1 && tile.X == currentTile.X {
 			return tile, nil
 		}
 	}

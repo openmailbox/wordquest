@@ -1,6 +1,7 @@
 package puzzle
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
 	"strings"
@@ -62,7 +63,7 @@ func (p Puzzle) checkWordFit(word Word, currentTile *Tile, wordIndex int, traver
 	if len(currentTile.Value) == 0 || strings.Compare(currentTile.Value, string(word.Value[wordIndex])) == 0 {
 		visitedTiles = append(visitedTiles, currentTile)
 
-		if len(word.Value) > wordIndex + 1 {
+		if len(word.Value) > wordIndex+1 {
 			nextTile, err := traverse(p, currentTile)
 			if err != nil {
 				return visitedTiles, err // reached edge of puzzle
@@ -94,7 +95,23 @@ func (p *Puzzle) GetTial(x int, y int) (foundTile *Tile, e error) {
 func (p *Puzzle) Initialize() {
 	for i := 0; i < p.Length; i++ {
 		for j := 0; j < p.Width; j++ {
-			p.Tiles = append(p.Tiles, &Tile{"", i, j})
+			p.Tiles = append(p.Tiles, &Tile{"", j, i})
 		}
 	}
+}
+
+func (p Puzzle) String() string {
+	var buffer bytes.Buffer
+
+	buffer.WriteString(fmt.Sprintf("A %vx%v puzzle containing %v words:\n", p.Length, p.Width, len(p.Words)))
+
+	for _, tile := range p.Tiles {
+		buffer.WriteString(fmt.Sprintf(" %v ", tile.Value))
+
+		if tile.X >= p.Width-1 {
+			buffer.WriteString(fmt.Sprintln())
+		}
+	}
+
+	return buffer.String()
 }
