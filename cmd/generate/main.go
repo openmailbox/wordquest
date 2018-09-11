@@ -27,8 +27,6 @@ func main() {
 	fmt.Println("Filling puzzle with words:")
 
 	for _, word := range words {
-		fmt.Printf("%v\n", word)
-
 		var newWord puzzle.Word
 		newWord.Value = word
 
