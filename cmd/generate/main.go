@@ -3,12 +3,18 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"math/rand"
 	"strings"
+	"time"
 
 	"github.com/openmailbox/wordquest/pkg/puzzle"
 )
 
 func main() {
+	secs := time.Now().Unix()
+	fmt.Printf("Random seed: %v", secs)
+	rand.Seed(secs)
+
 	dat, err := ioutil.ReadFile("../../data/words-computer.txt")
 	if err != nil {
 		panic(err)
@@ -32,6 +38,8 @@ func main() {
 
 		newPuzzle.Add(newWord)
 	}
+
+	newPuzzle.Fill()
 
 	fmt.Println(newPuzzle)
 }

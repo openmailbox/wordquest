@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"math/rand"
 	"strings"
 )
 
@@ -20,6 +21,7 @@ func (p *Puzzle) Add(word Word) {
 	directions := []direction{leftToRight, upToDown, downToUp}
 	placed := false
 
+	// Randomize the iteration order of the tiles to have less deterministic word placement
 	for _, tile := range p.Tiles {
 		fmt.Printf("Looking at tile {%v,%v} at %p\n", tile.X, tile.Y, &tile)
 		for _, direction := range directions {
@@ -77,6 +79,24 @@ func (p Puzzle) checkWordFit(word Word, currentTile *Tile, wordIndex int, traver
 
 	message := fmt.Sprintf("tile '%v' does not match '%v'", currentTile.Value, string(word.Value[wordIndex]))
 	return visitedTiles, errors.New(message)
+}
+
+// Fill - Fill in all remaining blank tiles with random letters
+func (p *Puzzle) Fill() {
+	var words []string
+
+	for _, word := range p.Words {
+		words = append(words, word.Value)
+	}
+
+	letterList := strings.Join(words, "")
+	length := len(letterList)
+
+	for _, tile := range p.Tiles {
+		if len(tile.Value) == 0 {
+			tile.Value = string(letterList[rand.Intn(length)])
+		}
+	}
 }
 
 // GetTial - Find the tial in the current puzzle by coordinates
