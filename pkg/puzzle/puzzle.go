@@ -10,9 +10,9 @@ import (
 
 // Puzzle - Describes the structure of the word search puzzle
 type Puzzle struct {
-	Length int
-	Width  int
-	Tiles  []*Tile
+	Length int     `json:"length"`
+	Width  int     `json:"width"`
+	Tiles  []*Tile `json:"tiles"`
 	Words  []Word
 }
 
