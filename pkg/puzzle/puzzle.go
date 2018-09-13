@@ -2,6 +2,7 @@ package puzzle
 
 import (
 	"bytes"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"math/rand"
@@ -10,9 +11,9 @@ import (
 
 // Puzzle - Describes the structure of the word search puzzle
 type Puzzle struct {
-	Length int     
-	Width  int     
-	Tiles  []*Tile 
+	Length int
+	Width  int
+	Tiles  []*Tile
 	Words  []Word
 }
 
@@ -109,6 +110,19 @@ func (p *Puzzle) GetTial(x int, y int) (foundTile *Tile, e error) {
 
 	message := fmt.Sprintf("tile {%v,%v} not found in puzzle.", x, y)
 	return &Tile{}, errors.New(message)
+}
+
+// MarshalJSON - JSON representation of the puzzle suitable for clients (without solutions)
+func (p Puzzle) MarshalJSON() ([]byte, error) {
+	return json.Marshal(&struct {
+		Length int     `json:"length"`
+		Width  int     `json:"width"`
+		Tiles  []*Tile `json:"tiles"`
+	}{
+		Length: p.Length,
+		Width:  p.Width,
+		Tiles:  p.Tiles,
+	})
 }
 
 // Initialize - Init the puzzle with blank tiles based on the provided Length and Width

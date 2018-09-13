@@ -6,7 +6,6 @@ import (
 	"net/http"
 
 	"github.com/gorilla/websocket"
-	"github.com/openmailbox/wordquest/pkg/puzzle"
 )
 
 const localAddress = ":8082" // TODO: parameterize this
@@ -17,17 +16,7 @@ type server struct {
 }
 
 func (s *server) handlePuzzle(w http.ResponseWriter, r *http.Request) {
-	var tmpPuzzle struct {
-		Length int            `json:"length"`
-		Width  int            `json:"width"`
-		Tiles  []*puzzle.Tile `json:"tiles"`
-	}
-
-	tmpPuzzle.Length = s.currentGame.currentPuzzle.Length
-	tmpPuzzle.Width = s.currentGame.currentPuzzle.Width
-	tmpPuzzle.Tiles = s.currentGame.currentPuzzle.Tiles
-
-	json.NewEncoder(w).Encode(tmpPuzzle)
+	json.NewEncoder(w).Encode(s.currentGame.currentPuzzle)
 }
 
 func (s *server) handleUpdates(w http.ResponseWriter, r *http.Request) {

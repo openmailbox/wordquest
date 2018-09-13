@@ -39,10 +39,10 @@ func (g *Game) newPlayer(newConn *websocket.Conn) {
 
 // Start - Primary interface for starting a new game.
 func (g *Game) Start() {
-    log.Println("Starting new game...")
+	log.Println("Starting new game...")
 
-    g.currentPuzzle = puzzle.GeneratePuzzle()
+	g.currentPuzzle = puzzle.GeneratePuzzle()
 
-    g.webServer = server{}
-    g.webServer.Start(g)
+	g.webServer = server{}
+	g.webServer.Start(g)
 }
