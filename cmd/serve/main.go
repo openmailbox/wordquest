@@ -1,11 +1,10 @@
 package main
 
 import (
-    "github.com/openmailbox/wordquest/internal"
-    "github.com/openmailbox/wordquest/pkg/puzzle"
+	"github.com/openmailbox/wordquest/internal/game"
 )
 
 func main() {
-    newPuzzle := puzzle.GeneratePuzzle()
-    internal.StartServer(newPuzzle)
+	newGame := game.Game{}
+	newGame.Start()
 }
