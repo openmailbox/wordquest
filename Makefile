@@ -10,6 +10,10 @@ cmd/serve/serve: pkg/puzzle/*.go internal/game/*.go
 web/static/dist/main.js: web/static/src/**/*.js
 	npm run build
 
+.PHONY: deps
+deps:
+	npm install
+
 .PHONY: clean
 clean:
 	rm cmd/generate/generate
