@@ -44,7 +44,7 @@ func (s *server) Start(game *Game) {
 
 	log.Printf("Listening on %v...\n", localAddress)
 
-	http.Handle("/", http.FileServer(http.Dir("../../web/static")))
+	http.Handle("/", http.FileServer(http.Dir("../../web/static/dist")))
 	http.HandleFunc("/puzzle", s.handlePuzzle)
 	http.HandleFunc("/updates", s.handleUpdates)
 
