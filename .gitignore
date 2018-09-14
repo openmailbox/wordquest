@@ -1,1 +1,4 @@
-cmd/generate/debug
+cmd/**/debug
+cmd/generate/generate
+cmd/serve/serve
+.*.swp

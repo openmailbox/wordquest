@@ -14,7 +14,7 @@ func GeneratePuzzle() Puzzle {
 	fmt.Printf("Random seed: %v", secs)
 	rand.Seed(secs)
 
-	dat, err := ioutil.ReadFile("../../data/words-computer.txt")
+	dat, err := ioutil.ReadFile("../../test/test-wordlist-computer.txt")
 	if err != nil {
 		panic(err)
 	}
@@ -38,7 +38,7 @@ func GeneratePuzzle() Puzzle {
 		newPuzzle.Add(newWord)
 	}
 
-    newPuzzle.Fill()
-    
-    return newPuzzle
+	newPuzzle.Fill()
+
+	return newPuzzle
 }
