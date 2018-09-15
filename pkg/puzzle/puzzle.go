@@ -24,14 +24,13 @@ func (p *Puzzle) Add(word Word) {
 
 	// Randomize the iteration order of the tiles to have less deterministic word placement
 	for _, tile := range p.Tiles {
-		fmt.Printf("Looking at tile {%v,%v} at %p\n", tile.X, tile.Y, &tile)
 		for _, direction := range directions {
 			var tiles []*Tile
 
 			tiles, err := p.checkWordFit(word, tile, 0, direction, tiles)
 
 			if err != nil {
-				fmt.Printf("Unable to add word: %v\n", err)
+				//fmt.Printf("Unable to add word: %v\n", err)
 				continue
 				// TODO: If the first tial is the one that can't fit, don't bother checking other directions
 			}

@@ -7,7 +7,7 @@ cmd/generate/generate: pkg/puzzle/*.go
 cmd/serve/serve: pkg/puzzle/*.go internal/game/*.go
 	go build -o $@ cmd/serve/main.go
 
-web/static/dist/main.js: web/static/src/**/*.js
+web/static/dist/main.js: web/static/src/**/*.js web/static/src/**/*.css
 	npm run build
 
 .PHONY: deps
@@ -19,4 +19,3 @@ clean:
 	rm cmd/generate/generate
 	rm cmd/serve/serve
 	rm web/static/dist/main.js
-

@@ -19,7 +19,7 @@ func GeneratePuzzle() Puzzle {
 		panic(err)
 	}
 
-	words := strings.Split(string(dat), "\n")
+	words := strings.Split(string(dat), "\r\n")
 
 	var newPuzzle Puzzle
 	newPuzzle.Length = 10

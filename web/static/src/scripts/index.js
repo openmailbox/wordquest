@@ -1,6 +1,10 @@
-window.WordQuest = window.WordQuest || {};
+import Puzzle from './puzzle.js';
 
-window.WordQuest.Puzzle = (function() {
+import '../styles/index.css';
+
+window.WordQuest = (function() {
+    var puzzle = null;
+
     var initialize = function() {
         refresh_();
     };
@@ -15,7 +19,10 @@ window.WordQuest.Puzzle = (function() {
 
     var puzzleCallback_ = function(_evt) {
         var data = JSON.parse(this.response);
-        console.log(data);
+
+        puzzle = new Puzzle(data.length, data.width, data.tiles);
+
+        puzzle.draw();
     };
 
     var subscribe_ = function() {
@@ -34,6 +41,7 @@ window.WordQuest.Puzzle = (function() {
     }
 
     return {
-        initialize: initialize
+        initialize: initialize,
+        getPuzzle: function() { return puzzle; }
     };
 })();
