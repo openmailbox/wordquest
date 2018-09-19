@@ -11,7 +11,7 @@ import (
 // GeneratePuzzle - A factory for making new puzzles
 func GeneratePuzzle() Puzzle {
 	secs := time.Now().Unix()
-	fmt.Printf("Random seed: %v", secs)
+	fmt.Printf("Random seed: %v\n", secs)
 	rand.Seed(secs)
 
 	dat, err := ioutil.ReadFile("../../test/test-wordlist-computer.txt")

@@ -1,4 +1,4 @@
-import Tile from './tile.js';
+window.WordQuest = window.WordQuest || {};
 
 /**
  * Top-level component for the game puzzle.
@@ -10,7 +10,7 @@ import Tile from './tile.js';
  * @param {Number} tiles[].y - The Y-coordinate of this tile.
  * @param {string} tiles[].value - The letter contained in this tile.
  */
-function Puzzle(length, width, tiles) {
+WordQuest.Puzzle = function(length, width, tiles) {
   this.tiles        = [];
   this.length       = length;
   this.width        = width;
@@ -18,12 +18,12 @@ function Puzzle(length, width, tiles) {
   this.highlighted  = [];    // array of tiles currently highlighted
 
   for (var i = 0; i < tiles.length; i++) {
-    var newTile = new Tile(tiles[i].x, tiles[i].y, tiles[i].value, this);
+    var newTile = new WordQuest.Tile(tiles[i].x, tiles[i].y, tiles[i].value, this);
     this.tiles.push(newTile);
   }
 };
 
-Puzzle.prototype.draw = function () {
+WordQuest.Puzzle.prototype.draw = function () {
   var table    = document.createElement('table');
   var tbody    = document.createElement('tbody');
   var tr       = document.createElement('tr');
@@ -48,7 +48,7 @@ Puzzle.prototype.draw = function () {
   document.getElementById('wordquest').appendChild(table);
 }
 
-Puzzle.prototype.endHighlight = function() {
+WordQuest.Puzzle.prototype.endHighlight = function() {
   this.highlighting = false;
   this.highlighted  = [];
   // submit answer
@@ -56,10 +56,10 @@ Puzzle.prototype.endHighlight = function() {
 
 /**
  * Generic event handler for callbacks to make Puzzle conform to EventListener interface
- * @param {Event} event 
+ * @param {Event} event
  * @param {Tile} event.highlightedTile - The highlighted tile
  */
-Puzzle.prototype.handleEvent = function(event) {
+WordQuest.Puzzle.prototype.handleEvent = function(event) {
   if (event.type === 'mousedown' || (event.type === 'mouseover' && this.highlighting)) {
     if (this.highlighted[this.highlighted.length - 2] == event.highlightingTile) {
       var leaving = this.highlighted.pop();
@@ -72,9 +72,7 @@ Puzzle.prototype.handleEvent = function(event) {
   }
 }
 
-Puzzle.prototype.highlight = function(tile) {
+WordQuest.Puzzle.prototype.highlight = function(tile) {
   this.highlighting = true;
   this.highlighted.push(tile);
 };
-
-export default Puzzle;

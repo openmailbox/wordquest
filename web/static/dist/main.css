@@ -1,0 +1,17 @@
+body {
+  font-size: 1.5em;
+}
+
+table {
+  border: 1px solid black;
+  border-collapse: collapse;
+  user-select: none;
+}
+
+td {
+  padding: 0.5em;
+}
+
+.highlighted {
+  background-color: orange;
+}

@@ -1,5 +1,12 @@
+JSDIR=./web/static/src/scripts
+CSSDIR=./web/static/src/styles
+
 .PHONY: all
-all: cmd/generate/generate cmd/serve/serve web/static/dist/main.js
+all: cmd/generate/generate cmd/serve/serve web/static/dist/main.js web/static/dist/main.css
+
+.PHONY: run
+run: all
+	cd cmd/serve && ./serve
 
 cmd/generate/generate: pkg/puzzle/*.go
 	go build -o $@ cmd/generate/main.go
@@ -7,15 +14,15 @@ cmd/generate/generate: pkg/puzzle/*.go
 cmd/serve/serve: pkg/puzzle/*.go internal/game/*.go
 	go build -o $@ cmd/serve/main.go
 
-web/static/dist/main.js: web/static/src/**/*.js web/static/src/**/*.css
-	npm run build
+web/static/dist/main.js: $(JSDIR)/*.js $(JSDIR)/**/*.js
+	cat $(JSDIR)/*.js $(JSDIR)/**/*.js > web/static/dist/main.js
 
-.PHONY: deps
-deps:
-	npm install
+web/static/dist/main.css: $(CSSDIR)/*.css
+	cat $(CSSDIR)/*.css > web/static/dist/main.css
 
 .PHONY: clean
 clean:
 	rm cmd/generate/generate
 	rm cmd/serve/serve
 	rm web/static/dist/main.js
+	rm web/static/dist/main.css

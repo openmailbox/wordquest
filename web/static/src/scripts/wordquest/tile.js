@@ -1,3 +1,5 @@
+window.WordQuest = window.WordQuest || {};
+
 /**
  * Individual cell within the puzzle.
  * @constructor
@@ -6,7 +8,7 @@
  * @param {string} value - The letter shown on this tile.
  * @param {Puzzle} puzzle - The containing puzzle.
  */
-var Tile = function (x, y, value, puzzle) {
+WordQuest.Tile = function (x, y, value, puzzle) {
   this.x       = x;
   this.y       = y;
   this.value   = value;
@@ -15,9 +17,9 @@ var Tile = function (x, y, value, puzzle) {
 };
 
 /**
- * @param {Element} parent - The parent element to draw into. 
+ * @param {Element} parent - The parent element to draw into.
  */
-Tile.prototype.draw = function (parent) {
+WordQuest.Tile.prototype.draw = function (parent) {
   this.element = document.createElement('td');
 
   this.element.innerText = this.value;
@@ -32,17 +34,15 @@ Tile.prototype.draw = function (parent) {
 
 /**
  * Generic event handler for callbacks to make Puzzle conform to EventListener interface
- * @param {Event} event 
+ * @param {Event} event
  */
-Tile.prototype.handleEvent = function(event) {
+WordQuest.Tile.prototype.handleEvent = function(event) {
   if (event.type === 'mousedown' || (event.type === 'mouseover' && this.puzzle.highlighting)) {
     this.element.classList.add('highlighted');
     event.highlightingTile = this;
   }
 };
 
-Tile.prototype.removeHighlight = function() {
+WordQuest.Tile.prototype.removeHighlight = function() {
   this.element.classList.remove('highlighted');
 };
-
-export default Tile;
