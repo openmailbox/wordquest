@@ -14,7 +14,8 @@ type Puzzle struct {
 	Length int
 	Width  int
 	Tiles  []*Tile
-	Words  []Word
+	Words  []Word // Set of all possible answers
+	Solved []Word // Set of already-discovered answers
 }
 
 // Add - Add a new word to the puzzle
@@ -109,6 +110,24 @@ func (p *Puzzle) GetTial(x int, y int) (foundTile *Tile, e error) {
 
 	message := fmt.Sprintf("tile {%v,%v} not found in puzzle.", x, y)
 	return &Tile{}, errors.New(message)
+}
+
+// SubmitAnswer - Accept a new answer if it matches a word in the answer list and it has not already been submitted
+func (p *Puzzle) SubmitAnswer(submission Word) bool {
+	for _, word := range p.Words {
+		if word.Compare(submission) {
+			for _, submittedWord := range p.Solved {
+				if submittedWord.Compare(submission) {
+					return false
+				}
+			}
+			p.Solved = append(p.Solved, word)
+
+			return true
+		}
+	}
+
+	return false
 }
 
 // MarshalJSON - JSON representation of the puzzle suitable for clients (without solutions)

@@ -49,9 +49,37 @@ WordQuest.Puzzle.prototype.draw = function () {
 }
 
 WordQuest.Puzzle.prototype.endHighlight = function() {
+  var word        = '';
+  var tileObjects = [];
+
+  for (var i = 0; i < this.highlighted.length; i++) {
+    word += this.highlighted[i].value;
+
+    var newTile = { 
+      x:     this.highlighted[i].x,
+      y:     this.highlighted[i].y,
+      value: this.highlighted[i].value
+    }
+
+    tileObjects.push(newTile);
+  }
+
+  var submission = { 
+    value: word,
+    tiles: tileObjects
+  };
+
+  var oReq = new XMLHttpRequest();
+
+  oReq.addEventListener("load", function(_) {
+    console.log(this.response);
+  });
+
+  oReq.open("POST", "submit");
+  oReq.send(JSON.stringify(submission));
+
   this.highlighting = false;
   this.highlighted  = [];
-  // submit answer
 };
 
 /**
