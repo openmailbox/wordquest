@@ -21,7 +21,6 @@ WordQuest.initialize = (function() {
         WordQuest.currentPuzzle.draw();
     };
 
-
     var _subscribe = function() {
         var socket = new WebSocket('ws://localhost:8082/updates');
 

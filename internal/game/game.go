@@ -14,6 +14,26 @@ type Game struct {
 	webServer     server
 }
 
+func (g *Game) disconnectPlayer(player player) {
+	var index int
+
+	for i, p := range g.players {
+		if p == player {
+			index = i
+			break
+		}
+	}
+
+	log.Printf("Closing connection to %v\n", player.connection.RemoteAddr())
+
+	player.connection.Close()
+
+	g.players[index], g.players[len(g.players)-1] = g.players[len(g.players)-1], g.players[index]
+	g.players = g.players[:len(g.players)-1]
+
+	log.Printf("%v total players", len(g.players))
+}
+
 func (g *Game) newPlayer(newConn *websocket.Conn) {
 	log.Printf("New connection from %v\n", newConn.RemoteAddr())
 
@@ -22,9 +42,9 @@ func (g *Game) newPlayer(newConn *websocket.Conn) {
 
 	log.Printf("%v total players", len(g.players))
 
-	// defer server.closeConnection(newPlayer)
-
 	go func() {
+		defer g.disconnectPlayer(newPlayer)
+
 		for {
 			_, message, err := newPlayer.connection.ReadMessage()
 			if err != nil {
