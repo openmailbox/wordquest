@@ -3,4 +3,4 @@ cmd/generate/generate
 cmd/serve/serve
 .*.swp
 node_modules
-web/static/dist/main.js
+web/static/dist/main*.js

@@ -16,6 +16,7 @@ cmd/serve/serve: pkg/puzzle/*.go internal/game/*.go
 
 web/static/dist/main.js: $(JSDIR)/*.js $(JSDIR)/**/*.js
 	cat $(JSDIR)/*.js $(JSDIR)/**/*.js > web/static/dist/main.js
+	tr -d [:space:] < web/static/dist/main.js > web/static/dist/main.min.js
 
 web/static/dist/main.css: $(CSSDIR)/*.css
 	cat $(CSSDIR)/*.css > web/static/dist/main.css
