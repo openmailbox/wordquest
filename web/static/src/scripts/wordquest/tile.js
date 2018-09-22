@@ -16,10 +16,16 @@ WordQuest.Tile = function (x, y, value, puzzle) {
   this.element = null;
 };
 
+WordQuest.Tile.prototype.addHighlight = function() {
+  this.element.classList.add('highlighted');
+}
+
 /**
  * @param {Element} parent - The parent element to draw into.
  */
 WordQuest.Tile.prototype.draw = function (parent) {
+  if (this.element !== null) this.element.remove();
+
   this.element = document.createElement('td');
 
   this.element.innerText = this.value;

@@ -3,27 +3,18 @@ window.WordQuest = window.WordQuest || {};
 /**
  * Top-level component for the game puzzle.
  * @constructor
- * @param {Number} length - The maximum Y-value of the puzzle.
- * @param {Number} width - The maximum X-value of the puzzle.
- * @param {Object[]} tiles - The provided tile-data.
- * @param {Number} tiles[].x - The X-coordinate of this tile.
- * @param {Number} tiles[].y - The Y-coordinate of this tile.
- * @param {string} tiles[].value - The letter contained in this tile.
  */
-WordQuest.Puzzle = function(length, width, tiles) {
-  this.tiles        = [];
-  this.length       = length;
-  this.width        = width;
+WordQuest.Puzzle = function() {
+  this.element      = null;
   this.highlighting = false; // is the user currently dragging + highlighting an answer
   this.highlighted  = [];    // array of tiles currently highlighted
-
-  for (var i = 0; i < tiles.length; i++) {
-    var newTile = new WordQuest.Tile(tiles[i].x, tiles[i].y, tiles[i].value, this);
-    this.tiles.push(newTile);
-  }
+  this.solutions    = [];
+  this.tiles        = [];
 };
 
 WordQuest.Puzzle.prototype.draw = function () {
+  if (this.element !== null) this.element.remove();
+
   var table    = document.createElement('table');
   var tbody    = document.createElement('tbody');
   var tr       = document.createElement('tr');
@@ -46,6 +37,10 @@ WordQuest.Puzzle.prototype.draw = function () {
   table.appendChild(tbody);
 
   document.getElementById('wordquest').appendChild(table);
+
+  this.element = table;
+
+  this.highlightSolutions();
 }
 
 WordQuest.Puzzle.prototype.endHighlight = function() {
@@ -78,6 +73,14 @@ WordQuest.Puzzle.prototype.endHighlight = function() {
   oReq.open("POST", "submit");
   oReq.send(JSON.stringify(submission));
 };
+
+WordQuest.Puzzle.prototype.getTial = function(x, y) {
+  for (var i = 0; i < this.tiles.length; i++) {
+    if (this.tiles[i].x === x && this.tiles[i].y === y) return this.tiles[i];
+  }
+
+  return null;
+}
 
 /**
  * Generic event handler for callbacks to make Puzzle conform to EventListener interface
@@ -120,6 +123,7 @@ WordQuest.Puzzle.prototype.handleHighlighting = function(type, tile) {
  * @param {XMLHttpRequest} request - The request object.
  */
 WordQuest.Puzzle.prototype.handleSubmissionResult = function(event) {
+  // TODO: If the tile is involved in another solution, don't un-highlight it
   if (event.status === 404) {
     for (var i = 0; i < this.highlighted.length; i++) {
       this.highlighted[i].removeHighlight();
@@ -132,4 +136,44 @@ WordQuest.Puzzle.prototype.handleSubmissionResult = function(event) {
 WordQuest.Puzzle.prototype.highlight = function(tile) {
   this.highlighting = true;
   this.highlighted.push(tile);
+};
+
+WordQuest.Puzzle.prototype.highlightSolutions = function() {
+  for (var i = 0; i < this.solutions.length; i++) {
+    var solution = this.solutions[i];
+
+    for (var j = 0; j < solution.tiles.length; j++) {
+      var x    = solution.tiles[j].x;
+      var y    = solution.tiles[j].y;
+      var tial = this.getTial(x, y);
+
+      tial.addHighlight();
+    }
+  }
+};
+
+/**
+ * Update the internal state of the puzzle from new data.
+ * @param {Object} newState 
+ * @param {Number} newState.length - The length of the puzzle
+ * @param {Number} newState.width - The width of the puzzle
+ * @param {Object[]} newState.tiles - The provided tile-data.
+ * @param {Number} newState.tiles[].x - The X-coordinate of this tile.
+ * @param {Number} newState.tiles[].y - The Y-coordinate of this tile.
+ * @param {string} newState.tiles[].value - The letter contained in this tile.
+ * @param {Object[]} newState.solutions - The known solutions to this puzzle.
+ */
+WordQuest.Puzzle.prototype.update = function(newState) {
+  console.log(newState);
+  this.tiles     = [];
+  this.length    = newState.length;
+  this.width     = newState.width;
+  this.solutions = newState.solutions || [];
+
+  for (var i = 0; i < newState.tiles.length; i++) {
+    var newTile = new WordQuest.Tile(newState.tiles[i].x, newState.tiles[i].y, newState.tiles[i].value, this);
+    this.tiles.push(newTile);
+  }
+
+  this.draw();
 };

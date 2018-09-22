@@ -16,9 +16,8 @@ WordQuest.initialize = (function() {
     var _callback = function(_evt) {
         var data = JSON.parse(this.response);
 
-        WordQuest.currentPuzzle = new WordQuest.Puzzle(data.length, data.width, data.tiles);
-
-        WordQuest.currentPuzzle.draw();
+        WordQuest.currentPuzzle = new WordQuest.Puzzle();
+        WordQuest.currentPuzzle.update(data);
     };
 
     var _subscribe = function() {
@@ -30,9 +29,9 @@ WordQuest.initialize = (function() {
         });
 
         socket.addEventListener('message', function(evt) {
-            var data = JSON.parse(evt.data);
+            var newState = JSON.parse(evt.data);
 
-            console.log(data);
+            WordQuest.currentPuzzle.update(newState);
         });
     }
 
