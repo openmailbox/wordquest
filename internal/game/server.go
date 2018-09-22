@@ -36,6 +36,10 @@ func (s *server) handleSubmit(w http.ResponseWriter, r *http.Request) {
 
 		if s.currentGame.currentPuzzle.SubmitAnswer(submission) {
 			status = http.StatusCreated
+
+			for _, player := range s.currentGame.players {
+				player.connection.WriteJSON(s.currentGame.currentPuzzle)
+			}
 		} else {
 			status = http.StatusNotFound
 		}

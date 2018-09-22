@@ -73,9 +73,9 @@ func (p Puzzle) checkWordFit(word Word, currentTile *Tile, wordIndex int, traver
 			}
 
 			return p.checkWordFit(word, nextTile, wordIndex+1, traverse, visitedTiles)
-		} else {
-			return visitedTiles, nil
 		}
+
+		return visitedTiles, nil
 	}
 
 	message := fmt.Sprintf("tile '%v' does not match '%v'", currentTile.Value, string(word.Value[wordIndex]))
@@ -133,13 +133,15 @@ func (p *Puzzle) SubmitAnswer(submission Word) bool {
 // MarshalJSON - JSON representation of the puzzle suitable for clients (without solutions)
 func (p Puzzle) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
-		Length int     `json:"length"`
-		Width  int     `json:"width"`
-		Tiles  []*Tile `json:"tiles"`
+		Length    int     `json:"length"`
+		Width     int     `json:"width"`
+		Tiles     []*Tile `json:"tiles"`
+		Solutions []Word  `json:"solutions"`
 	}{
-		Length: p.Length,
-		Width:  p.Width,
-		Tiles:  p.Tiles,
+		Length:    p.Length,
+		Width:     p.Width,
+		Tiles:     p.Tiles,
+		Solutions: p.Solved,
 	})
 }
 
