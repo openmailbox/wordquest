@@ -82,20 +82,36 @@ WordQuest.Puzzle.prototype.endHighlight = function() {
 /**
  * Generic event handler for callbacks to make Puzzle conform to EventListener interface
  * @param {Event} event
- * @param {Tile} event.highlightedTile - The highlighted tile
+ * @param {WordQuest.Tile} event.highlightedTile - The highlighted tile
  */
 WordQuest.Puzzle.prototype.handleEvent = function(event) {
-  if (event.type === 'mousedown' || (event.type === 'mouseover' && this.highlighting)) {
-    if (this.highlighted[this.highlighted.length - 2] == event.highlightingTile) {
-      var leaving = this.highlighted.pop();
-      leaving.removeHighlight();
-    } else {
-      this.highlight(event.highlightingTile);
-    }
-  } else if (event.type === 'mouseup') {
-    this.endHighlight();
-  } else if (event.type === 'load') {
-    this.handleSubmissionResult(event.target);
+  switch (event.type) {
+    case 'mousedown':
+    case 'mouseover':
+      this.handleHighlighting(event.type, event.highlightingTile);
+      break;
+    case 'mouseup':
+      this.endHighlight();
+      break;
+    case 'load':
+      this.handleSubmissionResult(event.target);
+      break;
+  }
+}
+
+/**
+ * Event handler for highlighting tiles in the puzzle
+ * @param {string} type - the type of the event (i.e. 'mousedown')
+ * @param {WordQuest.Tile} tile - The tile currently being highlighted
+ */
+WordQuest.Puzzle.prototype.handleHighlighting = function(type, tile) {
+  if (type !== 'mousedown' && !this.highlighting) return;
+
+  if (this.highlighted[this.highlighted.length - 2] == tile) {
+    var leaving = this.highlighted.pop();
+    leaving.removeHighlight();
+  } else {
+    this.highlight(tile);
   }
 }
 
