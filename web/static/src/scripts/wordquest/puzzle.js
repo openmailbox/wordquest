@@ -52,6 +52,8 @@ WordQuest.Puzzle.prototype.endHighlight = function() {
   var word        = '';
   var tileObjects = [];
 
+  this.highlighting = false;
+
   for (var i = 0; i < this.highlighted.length; i++) {
     word += this.highlighted[i].value;
 
@@ -71,15 +73,10 @@ WordQuest.Puzzle.prototype.endHighlight = function() {
 
   var oReq = new XMLHttpRequest();
 
-  oReq.addEventListener("load", function(_) {
-    console.log(this.response);
-  });
+  oReq.addEventListener("load", this);
 
   oReq.open("POST", "submit");
   oReq.send(JSON.stringify(submission));
-
-  this.highlighting = false;
-  this.highlighted  = [];
 };
 
 /**
@@ -97,7 +94,23 @@ WordQuest.Puzzle.prototype.handleEvent = function(event) {
     }
   } else if (event.type === 'mouseup') {
     this.endHighlight();
+  } else if (event.type === 'load') {
+    this.handleSubmissionResult(event.target);
   }
+}
+
+/**
+ * Callback for the server response after an answer submission.
+ * @param {XMLHttpRequest} request - The request object.
+ */
+WordQuest.Puzzle.prototype.handleSubmissionResult = function(event) {
+  if (event.status === 404) {
+    for (var i = 0; i < this.highlighted.length; i++) {
+      this.highlighted[i].removeHighlight();
+    }
+  }
+
+  this.highlighted  = [];
 }
 
 WordQuest.Puzzle.prototype.highlight = function(tile) {
