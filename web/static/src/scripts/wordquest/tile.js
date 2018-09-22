@@ -3,7 +3,7 @@ window.WordQuest = window.WordQuest || {};
 /**
  * Individual cell within the puzzle.
  * @constructor
- * @param {Number}gx - The x-coordinate of the tile.
+ * @param {Number} x - The x-coordinate of the tile.
  * @param {Number} y - The y-coordinate of the tile.
  * @param {string} value - The letter shown on this tile.
  * @param {Puzzle} puzzle - The containing puzzle.

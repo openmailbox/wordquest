@@ -123,12 +123,20 @@ WordQuest.Puzzle.prototype.handleHighlighting = function(type, tile) {
  * @param {XMLHttpRequest} request - The request object.
  */
 WordQuest.Puzzle.prototype.handleSubmissionResult = function(event) {
-  // TODO: If the tile is involved in another solution, don't un-highlight it
   if (event.status === 404) {
+    var coordinates = this.solutionCoordinates();
+
     for (var i = 0; i < this.highlighted.length; i++) {
-      this.highlighted[i].removeHighlight();
+      var coord = {x: this.highlighted[i].x, y: this.highlighted[i].y};
+      var found = coordinates.find(function(j) {
+        return j.x === coord.x && j.y === coord.y;
+      });
+
+      if (found === undefined) {
+        this.highlighted[i].removeHighlight();
+      }
     }
-  }
+  } 
 
   this.highlighted  = [];
 }
@@ -152,6 +160,19 @@ WordQuest.Puzzle.prototype.highlightSolutions = function() {
   }
 };
 
+WordQuest.Puzzle.prototype.solutionCoordinates = function() {
+  var coordinates = [];
+
+  for (var i = 0; i < this.solutions.length; i++) {
+    for (var j = 0; j < this.solutions[i].tiles.length; j++) {
+      var tile = this.solutions[i].tiles[j];
+      coordinates.push({x: tile.x, y: tile.y});
+    }
+  }
+
+  return coordinates;
+};
+
 /**
  * Update the internal state of the puzzle from new data.
  * @param {Object} newState 
@@ -164,7 +185,6 @@ WordQuest.Puzzle.prototype.highlightSolutions = function() {
  * @param {Object[]} newState.solutions - The known solutions to this puzzle.
  */
 WordQuest.Puzzle.prototype.update = function(newState) {
-  console.log(newState);
   this.tiles     = [];
   this.length    = newState.length;
   this.width     = newState.width;
